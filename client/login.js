@@ -1,14 +1,26 @@
 import React from 'react'
-import {connect} from 'react-redux'
+import { connect } from 'react-redux'
+import { login } from './store'
 
-const Login = () => {
+const Login = (props) => {
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+
+    props.login({
+      email: event.target.email.value,
+      password: event.target.password.value
+    })
+      .catch(error => console.log(error))
+
+  }
 
   return (
     <div className='h100 w100 flex column align-items-center justify-center'>
       <h1>Let's Loggin'!</h1>
       <div className='flex w50'>
         <img src='/loggin.png' />
-        <form className='grow1'>
+        <form className='grow1' onSubmit={handleSubmit}>
           <div className='flex column'>
             <div className='flex column m1'>
               <label htmlFor='email'>Email</label>
@@ -30,6 +42,7 @@ const Login = () => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
+    login: (user) => dispatch(login(user))
   };
 }
 

@@ -1,19 +1,26 @@
-import React, {Component} from 'react'
+import React, { Component } from 'react'
 import ReactDOM from 'react-dom'
-import {Provider, connect} from 'react-redux'
-import {BrowserRouter as Router, Route, Switch, Redirect} from 'react-router-dom'
+import { Provider, connect } from 'react-redux'
+import { HashRouter as Router, Route, Switch, Redirect } from 'react-router-dom'
 import store from './store'
 import Login from './login'
 import UserPage from './user-page'
+import { sessionLogin } from './store'
 
 
 
 class _Main extends Component {
-  componentDidMount () {
+  componentDidMount() {
+    this.props.sessionLogin()
+      .catch(error => console.log(error))
   }
 
-  render () {
+  render() {
+
     const { isLoggedIn } = this.props;
+    console.log(this.props.user)
+    console.log(isLoggedIn)
+
     return (
       <Switch>
         {
@@ -30,13 +37,14 @@ class _Main extends Component {
   }
 };
 
-const mapStateToProps = ({ user})=> {
+const mapStateToProps = ({ user }) => {
   return {
-    isLoggedIn: !!user.id
+    isLoggedIn: !!user.id, user
   };
 };
 
-const Main = connect(mapStateToProps)(_Main);
+
+const Main = connect(mapStateToProps, { sessionLogin })(_Main);
 
 ReactDOM.render(
   <Provider store={store}>
